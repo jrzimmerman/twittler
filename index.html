@@ -3,19 +3,20 @@
 
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link href="style.css" rel="stylesheet">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <link href="style.css" rel="stylesheet">
 
   <script src="jquery.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="data_generator.js"></script>
+  <script src="jquery.timeago.js"></script>
 </head>
 
 <body>
   <div class="container">
-    <h1>Twittler</h1>
+    <h1>Twittler
     <input class="draft" type="text" />
-    <button class="send" enabled>Send</button>
+    <button class="send" enabled>Send</button></h1>
 
     <ul class="messages">
 
@@ -26,54 +27,28 @@
   <script>
     $(document).ready(function() {
 
-      var formatDate = function(date) {
-        var day = String(date.getDate());
-        var monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-        var month = monthArray[date.getMonth()];
-        var shortDate = month + " " + day;
-        var hours = date.getHours();
-        var dayOrNight = 'AM';
-        if (hours === 0) {
-          hours = 12;
-        } else if (hours > 12) {
-          hours -= 12;
-          dayOrNight = 'PM';
-        } else if (hours === 12) {
-          dayOrNight = 'PM';
-        }
-        hours = String(hours);
-        var minutes = date.getMinutes();
-        if (minutes < 10) {
-          minutes = '0' + String(minutes);
-        }
-        minutes = String(minutes);
-        var formattedTime = hours + ':' + minutes + ' ' + dayOrNight;
-        return formattedTime + " " + shortDate;
-      }
       var display = function(tweet) {
         $('.messages').prepend('<li>' + tweet + '</li>');
       }
       var sendText = function() {
         var d = new Date();
         input = $(".draft").val();
-        display('@zimmy130: ' + input + ' - ' + formatDate(d));
+        display('@zimmy130: ' + input + ' - ' + jQuery.timeago(d));
       }
       var tweet = function() {
         $(".messages").empty();
         var index = 0;
         while (index < streams.home.length) {
           var tweet = streams.home[index];
-          display('@' + tweet.user + ': ' + tweet.message + ' - ' + formatDate(tweet.created_at));
+          display('@' + tweet.user + ': ' + tweet.message + ' - ' + jQuery.timeago(tweet.created_at));
           index++;
         }
       };
       tweet();
       setInterval(tweet, 5000);
-
       $('.send').on('click', function() {
         sendText();
       });
-
     });
   </script>
 </body>
